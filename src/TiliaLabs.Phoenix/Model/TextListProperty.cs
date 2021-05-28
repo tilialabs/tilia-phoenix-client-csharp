@@ -27,85 +27,24 @@ namespace TiliaLabs.Phoenix.Model
     /// Text list property
     /// </summary>
     [DataContract]
-        public partial class TextListProperty :  IEquatable<TextListProperty>, IValidatableObject
+        public partial class TextListProperty : PropertyObject, IEquatable<TextListProperty>, IValidatableObject
     {
         /// <summary>
-        /// Defines Type
+        /// Gets Type
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum Boolean for value: Boolean
-            /// </summary>
-            [EnumMember(Value = "Boolean")]
-            Boolean = 1,
-            /// <summary>
-            /// Enum Date for value: Date
-            /// </summary>
-            [EnumMember(Value = "Date")]
-            Date = 2,
-            /// <summary>
-            /// Enum Double for value: Double
-            /// </summary>
-            [EnumMember(Value = "Double")]
-            Double = 3,
-            /// <summary>
-            /// Enum Integer for value: Integer
-            /// </summary>
-            [EnumMember(Value = "Integer")]
-            Integer = 4,
-            /// <summary>
-            /// Enum String for value: String
-            /// </summary>
-            [EnumMember(Value = "String")]
-            String = 5,
-            /// <summary>
-            /// Enum TextList for value: TextList
-            /// </summary>
-            [EnumMember(Value = "TextList")]
-            TextList = 6        }
-        /// <summary>
-        /// Gets or Sets Type
-        /// </summary>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        [DataMember(Name = "type", EmitDefaultValue = false)]
+        public override TypeEnum Type { get; } = TypeEnum.TextList;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TextListProperty" /> class.
         /// </summary>
         /// <param name="name">Property name (required).</param>
         /// <param name="value">Property value.</param>
-        /// <param name="type">type (required).</param>
-        public TextListProperty(string name = default(string), List<string> value = default(List<string>), TypeEnum type = default(TypeEnum))
+        public TextListProperty(string name = default(string), List<string> value = default(List<string>)) : base(name)
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for TextListProperty and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for TextListProperty and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
-            this.Value = value;
+            Value = value;
         }
         
-        /// <summary>
-        /// Property name
-        /// </summary>
-        /// <value>Property name</value>
-        [DataMember(Name="name", EmitDefaultValue=false)]
-        public string Name { get; set; }
-
         /// <summary>
         /// Property value
         /// </summary>
@@ -129,15 +68,6 @@ namespace TiliaLabs.Phoenix.Model
             return sb.ToString();
         }
   
-        /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-
         /// <summary>
         /// Returns true if objects are equal
         /// </summary>
@@ -169,11 +99,6 @@ namespace TiliaLabs.Phoenix.Model
                     this.Value != null &&
                     input.Value != null &&
                     this.Value.SequenceEqual(input.Value)
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
                 );
         }
 
@@ -190,8 +115,6 @@ namespace TiliaLabs.Phoenix.Model
                     hashCode = hashCode * 59 + this.Name.GetHashCode();
                 if (this.Value != null)
                     hashCode = hashCode * 59 + this.Value.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
                 return hashCode;
             }
         }

@@ -33,6 +33,7 @@ namespace TiliaLabs.Phoenix.Test
     public class ProjectsAPIApiTests
     {
         private ProjectsAPIApi instance;
+        private string projectId;
 
         /// <summary>
         /// Setup before each unit test
@@ -40,7 +41,9 @@ namespace TiliaLabs.Phoenix.Test
         [SetUp]
         public void Init()
         {
-            instance = new ProjectsAPIApi();
+            Configuration config = Configuration.Default;
+            config.BasePath = "http://localhost:8022/phoenix";
+            instance = new ProjectsAPIApi(config);
         }
 
         /// <summary>
@@ -49,6 +52,96 @@ namespace TiliaLabs.Phoenix.Test
         [TearDown]
         public void Cleanup()
         {
+            if (projectId != null)
+            {
+                instance.DeleteJob1(projectId);
+                projectId = null;
+            }
+        }
+
+        private ResponseEntity createJob(string id, bool validate)
+        {
+            CreateJobResource body = new CreateJobResource(id: id);
+            ResponseEntity response = instance.CreateJob(body);
+            if (response.Success.HasValue && response.Success.Value)
+            {
+                projectId = id;
+            } else if (validate)
+            {
+                Assert.Fail("Could not create job with ID " + id);
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// Sample job with custom properties test
+        /// </summary>
+        [Test]
+        public void ProductCustomPropertiesTest()
+        {
+            // Create job
+            createJob("123", true);
+
+            // Create single empty product with all custom property types
+            AddProductEntity product1 = new AddProductEntity(name: "Product 1",
+                type: AddProductEntity.TypeEnum.Flat,  ordered: 50000, 
+                width: "220mm", height: "180mm");
+
+            var props = new List<PropertyEntity>();
+            props.Add(new PropertyEntity("SKU", "11-222",
+                PropertyEntity.TypeEnum.Text));
+            props.Add(new PropertyEntity("URGENT", "1",
+                PropertyEntity.TypeEnum.Boolean));
+            props.Add(new PropertyEntity("ORDER_ID", "567",
+                PropertyEntity.TypeEnum.Integer));
+            props.Add(new PropertyEntity("WEIGHT", "9263.444",
+                PropertyEntity.TypeEnum.Number));
+            props.Add(new PropertyEntity("SHIP_DATE", "2022/3/12",
+                PropertyEntity.TypeEnum.Date));
+            props.Add(new PropertyEntity("CONTACTS", "Bob,Sue,Gene",
+                PropertyEntity.TypeEnum.TextList));
+            product1.Properties = props;
+
+            ResponseEntity response = instance.CreateProduct1("123", product1);
+            Assert.IsTrue(response.Success.HasValue && response.Success.Value);
+
+            // Get V2 version of this project
+            PhoenixProject project = instance.GetJob1("123", "V2");
+            Assert.IsNotNull(project);
+
+            Assert.AreEqual(1, project.Products2.Count);
+            Product product = project.Products2[0];
+            Assert.AreEqual("Product 1", product.Name);
+
+            // Verify properties are the expected types and values
+            Assert.AreEqual(6, product.Properties.Count);
+            for (int i = 0; i < 6; i++)
+            {
+                Assert.AreEqual(props[i].Name, product.Properties[i].Name);
+            }
+            Assert.IsInstanceOf<StringProperty>(product.Properties[0]);
+            var stringProp = product.Properties[0] as StringProperty;
+            Assert.AreEqual(props[0].Value, stringProp.Value);
+
+            Assert.IsInstanceOf<BooleanProperty>(product.Properties[1]);
+            var boolProp = product.Properties[1] as BooleanProperty;
+            Assert.True(boolProp.Value.Value);
+
+            Assert.IsInstanceOf<IntegerProperty>(product.Properties[2]);
+            var intProp = product.Properties[2] as IntegerProperty;
+            Assert.AreEqual(567, intProp.Value);
+
+            Assert.IsInstanceOf<DoubleProperty>(product.Properties[3]);
+            var doubleProp = product.Properties[3] as DoubleProperty;
+            Assert.AreEqual(9263.444, doubleProp.Value);
+
+            Assert.IsInstanceOf<DateProperty>(product.Properties[4]);
+            var dateProp = product.Properties[4] as DateProperty;
+            Assert.AreEqual(DateTime.Parse(props[4].Value), dateProp.Value);
+
+            Assert.IsInstanceOf<TextListProperty>(product.Properties[5]);
+            var listProp = product.Properties[5] as TextListProperty;
+            Assert.AreEqual(3, listProp.Value.Count);
 
         }
 
@@ -61,7 +154,6 @@ namespace TiliaLabs.Phoenix.Test
             // TODO uncomment below to test 'IsInstanceOfType' ProjectsAPIApi
             //Assert.IsInstanceOfType(typeof(ProjectsAPIApi), instance, "instance is a ProjectsAPIApi");
         }
-
         /// <summary>
         /// Test ApplyImposeResult1
         /// </summary>

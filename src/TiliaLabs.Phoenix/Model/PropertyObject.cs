@@ -28,14 +28,20 @@ namespace TiliaLabs.Phoenix.Model
     /// Custom property
     /// </summary>
     [DataContract]
-    [JsonConverter(typeof(JsonSubtypes), "Type")]
-        public partial class PropertyObject :  IEquatable<PropertyObject>, IValidatableObject
+    [JsonConverter(typeof(JsonSubtypes), "type")]
+    [JsonSubtypes.KnownSubType(typeof(BooleanProperty), TypeEnum.Boolean)]
+    [JsonSubtypes.KnownSubType(typeof(DateProperty), TypeEnum.Date)]
+    [JsonSubtypes.KnownSubType(typeof(DoubleProperty), TypeEnum.Double)]
+    [JsonSubtypes.KnownSubType(typeof(IntegerProperty), TypeEnum.Integer)]
+    [JsonSubtypes.KnownSubType(typeof(StringProperty), TypeEnum.String)]
+    [JsonSubtypes.KnownSubType(typeof(TextListProperty), TypeEnum.TextList)]
+    public abstract class PropertyObject :  IEquatable<PropertyObject>, IValidatableObject
     {
         /// <summary>
         /// Defines Type
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
+        public enum TypeEnum
         {
             /// <summary>
             /// Enum Boolean for value: Boolean
@@ -66,18 +72,21 @@ namespace TiliaLabs.Phoenix.Model
             /// Enum TextList for value: TextList
             /// </summary>
             [EnumMember(Value = "TextList")]
-            TextList = 6        }
+            TextList = 6
+        }
+
         /// <summary>
-        /// Gets or Sets Type
+        /// Gets Type
         /// </summary>
         [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public virtual TypeEnum Type { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyObject" /> class.
         /// </summary>
         /// <param name="name">Property name (required).</param>
         /// <param name="type">type (required).</param>
-        public PropertyObject(string name = default(string), TypeEnum type = default(TypeEnum))
+        public PropertyObject(string name = default(string))
         {
             // to ensure "name" is required (not null)
             if (name == null)
@@ -87,15 +96,6 @@ namespace TiliaLabs.Phoenix.Model
             else
             {
                 this.Name = name;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for PropertyObject and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
             }
         }
         
