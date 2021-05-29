@@ -19,6 +19,8 @@ using NUnit.Framework;
 using TiliaLabs.Phoenix.Client;
 using TiliaLabs.Phoenix.Api;
 using TiliaLabs.Phoenix.Model;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace TiliaLabs.Phoenix.Test
 {
@@ -142,7 +144,29 @@ namespace TiliaLabs.Phoenix.Test
             Assert.IsInstanceOf<TextListProperty>(product.Properties[5]);
             var listProp = product.Properties[5] as TextListProperty;
             Assert.AreEqual(3, listProp.Value.Count);
+        }
 
+        /// <summary>
+        /// Deserialize JSON report in V2 format containing all four product
+        /// types: Flat, Bound, Folded, and Tiled, along with layouts 
+        /// containing all product components
+        /// </summary>
+        [Test]
+        public void DeserializeJsonV2ReportTest()
+        {
+            var json = File.ReadAllText("../../mix-job.json", Encoding.UTF8);
+            var project = JsonConvert.DeserializeObject<PhoenixProject>(json);
+            Assert.AreEqual(4, project.Products2.Count);
+            testProductPartType<FlatPart>(project.Products2[0]);
+            testProductPartType<BoundPart>(project.Products2[1]);
+            testProductPartType<FoldedPart>(project.Products2[2]);
+            testProductPartType<TiledPart>(project.Products2[3]);
+        }
+
+        private static void testProductPartType<T>(Product product)
+        {
+            Assert.AreEqual(1, product.Parts.Count);
+            Assert.IsInstanceOf<T>(product.Parts[0]);
         }
 
         /// <summary>

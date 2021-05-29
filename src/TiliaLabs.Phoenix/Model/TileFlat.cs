@@ -74,7 +74,7 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="fulfilled">Whether order quantity of this component has been fulfilled.</param>
         /// <param name="layouts">layouts.</param>
         /// <param name="overrun">Total number of overruns above ordered quantity.</param>
-        public TileFlat(DieDesign dieDesign = default(DieDesign), Spacing spacing = default(Spacing), Offcut offcut = default(Offcut), int? index = default(int?), Tile tile = default(Tile), TypeEnum type = default(TypeEnum), int? total = default(int?), int? placed = default(int?), bool? fulfilled = default(bool?), BoundsignatureLayouts layouts = default(BoundsignatureLayouts), int? overrun = default(int?))
+        public TileFlat(DieDesign dieDesign = default(DieDesign), Spacing spacing = default(Spacing), Offcut offcut = default(Offcut), int? index = default(int?), Tile tile = default(Tile), TypeEnum type = default(TypeEnum), int? total = default(int?), int? placed = default(int?), bool? fulfilled = default(bool?), List<BoundsignatureLayouts> layouts = default(List<BoundsignatureLayouts>), int? overrun = default(int?))
         {
             // to ensure "dieDesign" is required (not null)
             if (dieDesign == null)
@@ -193,7 +193,7 @@ namespace TiliaLabs.Phoenix.Model
         /// Gets or Sets Layouts
         /// </summary>
         [DataMember(Name="layouts", EmitDefaultValue=false)]
-        public BoundsignatureLayouts Layouts { get; set; }
+        public List<BoundsignatureLayouts> Layouts { get; set; }
 
         /// <summary>
         /// Total number of overruns above ordered quantity
@@ -309,7 +309,7 @@ namespace TiliaLabs.Phoenix.Model
                 (
                     this.Layouts == input.Layouts ||
                     (this.Layouts != null &&
-                    this.Layouts.Equals(input.Layouts))
+                    this.Layouts.SequenceEqual(input.Layouts))
                 ) && 
                 (
                     this.Overrun == input.Overrun ||

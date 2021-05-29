@@ -41,15 +41,7 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="path">Path.</param>
         public Size(string name = default(string), string description = default(string), string notes = default(string), string width = default(string), string height = default(string), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for Size and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
+            Name = name;
             // to ensure "width" is required (not null)
             if (width == null)
             {

@@ -42,20 +42,20 @@ namespace TiliaLabs.Phoenix.Model
             [EnumMember(Value = "Margins")]
             Margins = 1,
             /// <summary>
-            /// Enum UniformSpacing for value: Uniform Spacing
+            /// Enum Uniform for value: Uniform
             /// </summary>
-            [EnumMember(Value = "Uniform Spacing")]
-            UniformSpacing = 2,
+            [EnumMember(Value = "Uniform")]
+            Uniform = 2,
             /// <summary>
-            /// Enum SpacingfromBleed for value: Spacing from Bleed
+            /// Enum Bleed for value: Bleed
             /// </summary>
-            [EnumMember(Value = "Spacing from Bleed")]
-            SpacingfromBleed = 3,
+            [EnumMember(Value = "Bleed")]
+            Bleed = 3,
             /// <summary>
-            /// Enum SpacingfromTool for value: Spacing from Tool
+            /// Enum Tool for value: Tool
             /// </summary>
-            [EnumMember(Value = "Spacing from Tool")]
-            SpacingfromTool = 4        }
+            [EnumMember(Value = "Tool")]
+            Tool = 4        }
         /// <summary>
         /// Type
         /// </summary>

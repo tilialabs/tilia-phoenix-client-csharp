@@ -42,15 +42,7 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="path">Path.</param>
         public Dieline(string name = default(string), string description = default(string), string notes = default(string), DielineSource source = default(DielineSource), Path shape = default(Path), double? thickness = default(double?), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for Dieline and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
+            this.Name = name;
             // to ensure "shape" is required (not null)
             if (shape == null)
             {

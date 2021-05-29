@@ -27,72 +27,13 @@ namespace TiliaLabs.Phoenix.Model
     /// Tiled part for creating tiled work
     /// </summary>
     [DataContract]
-        public partial class TiledPart :  IEquatable<TiledPart>, IValidatableObject
+    public partial class TiledPart : PartObject, IEquatable<TiledPart>, IValidatableObject
     {
         /// <summary>
-        /// Part grain
+        /// Gets Type
         /// </summary>
-        /// <value>Part grain</value>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum GrainEnum
-        {
-            /// <summary>
-            /// Enum Horizontal for value: Horizontal
-            /// </summary>
-            [EnumMember(Value = "Horizontal")]
-            Horizontal = 1,
-            /// <summary>
-            /// Enum Vertical for value: Vertical
-            /// </summary>
-            [EnumMember(Value = "Vertical")]
-            Vertical = 2,
-            /// <summary>
-            /// Enum Consistent for value: Consistent
-            /// </summary>
-            [EnumMember(Value = "Consistent")]
-            Consistent = 3,
-            /// <summary>
-            /// Enum None for value: None
-            /// </summary>
-            [EnumMember(Value = "None")]
-            None = 4        }
-        /// <summary>
-        /// Part grain
-        /// </summary>
-        /// <value>Part grain</value>
-        [DataMember(Name="grain", EmitDefaultValue=false)]
-        public GrainEnum Grain { get; set; }
-        /// <summary>
-        /// Defines Type
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum Flat for value: Flat
-            /// </summary>
-            [EnumMember(Value = "Flat")]
-            Flat = 1,
-            /// <summary>
-            /// Enum Bound for value: Bound
-            /// </summary>
-            [EnumMember(Value = "Bound")]
-            Bound = 2,
-            /// <summary>
-            /// Enum Folded for value: Folded
-            /// </summary>
-            [EnumMember(Value = "Folded")]
-            Folded = 3,
-            /// <summary>
-            /// Enum Tiled for value: Tiled
-            /// </summary>
-            [EnumMember(Value = "Tiled")]
-            Tiled = 4        }
-        /// <summary>
-        /// Gets or Sets Type
-        /// </summary>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public override TypeEnum Type { get; } = TypeEnum.Tiled;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TiledPart" /> class.
         /// </summary>
@@ -104,56 +45,11 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="dieDesign">dieDesign (required).</param>
         /// <param name="tiling">tiling (required).</param>
         /// <param name="tiles">Tiled components for this tiled part (required).</param>
-        /// <param name="type">type (required).</param>
         /// <param name="material">material.</param>
         /// <param name="processes">Part processes.</param>
-        public TiledPart(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), DieDesign dieDesign = default(DieDesign), Tiling tiling = default(Tiling), List<TileFlat> tiles = default(List<TileFlat>), TypeEnum type = default(TypeEnum), Material material = default(Material), List<Process> processes = default(List<Process>))
+        public TiledPart(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), DieDesign dieDesign = default(DieDesign), Tiling tiling = default(Tiling), List<TileFlat> tiles = default(List<TileFlat>), Material material = default(Material), List<Process> processes = default(List<Process>))
+            : base(name, grain, pages, processSettings, rotation, material, processes)
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for TiledPart and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
-            // to ensure "grain" is required (not null)
-            if (grain == null)
-            {
-                throw new InvalidDataException("grain is a required property for TiledPart and cannot be null");
-            }
-            else
-            {
-                this.Grain = grain;
-            }
-            // to ensure "pages" is required (not null)
-            if (pages == null)
-            {
-                throw new InvalidDataException("pages is a required property for TiledPart and cannot be null");
-            }
-            else
-            {
-                this.Pages = pages;
-            }
-            // to ensure "processSettings" is required (not null)
-            if (processSettings == null)
-            {
-                throw new InvalidDataException("processSettings is a required property for TiledPart and cannot be null");
-            }
-            else
-            {
-                this.ProcessSettings = processSettings;
-            }
-            // to ensure "rotation" is required (not null)
-            if (rotation == null)
-            {
-                throw new InvalidDataException("rotation is a required property for TiledPart and cannot be null");
-            }
-            else
-            {
-                this.Rotation = rotation;
-            }
             // to ensure "dieDesign" is required (not null)
             if (dieDesign == null)
             {
@@ -181,53 +77,7 @@ namespace TiliaLabs.Phoenix.Model
             {
                 this.Tiles = tiles;
             }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for TiledPart and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
-            this.Material = material;
-            this.Processes = processes;
         }
-        
-        /// <summary>
-        /// Unique ID
-        /// </summary>
-        /// <value>Unique ID</value>
-        [DataMember(Name="id", EmitDefaultValue=false)]
-        public string Id { get; private set; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
-        /// <value>Name</value>
-        [DataMember(Name="name", EmitDefaultValue=false)]
-        public string Name { get; set; }
-
-
-        /// <summary>
-        /// Part pages
-        /// </summary>
-        /// <value>Part pages</value>
-        [DataMember(Name="pages", EmitDefaultValue=false)]
-        public List<Page> Pages { get; set; }
-
-        /// <summary>
-        /// Part process settings
-        /// </summary>
-        /// <value>Part process settings</value>
-        [DataMember(Name="process-settings", EmitDefaultValue=false)]
-        public List<ProcessSetting> ProcessSettings { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Rotation
-        /// </summary>
-        [DataMember(Name="rotation", EmitDefaultValue=false)]
-        public Rotation Rotation { get; set; }
 
         /// <summary>
         /// Gets or Sets DieDesign
@@ -247,20 +97,6 @@ namespace TiliaLabs.Phoenix.Model
         /// <value>Tiled components for this tiled part</value>
         [DataMember(Name="tiles", EmitDefaultValue=false)]
         public List<TileFlat> Tiles { get; set; }
-
-
-        /// <summary>
-        /// Gets or Sets Material
-        /// </summary>
-        [DataMember(Name="material", EmitDefaultValue=false)]
-        public Material Material { get; set; }
-
-        /// <summary>
-        /// Part processes
-        /// </summary>
-        /// <value>Part processes</value>
-        [DataMember(Name="processes", EmitDefaultValue=false)]
-        public List<Process> Processes { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -285,15 +121,6 @@ namespace TiliaLabs.Phoenix.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
-        /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
 
         /// <summary>
         /// Returns true if objects are equal
@@ -315,70 +142,22 @@ namespace TiliaLabs.Phoenix.Model
             if (input == null)
                 return false;
 
-            return 
-                (
-                    this.Id == input.Id ||
-                    (this.Id != null &&
-                    this.Id.Equals(input.Id))
-                ) && 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.Grain == input.Grain ||
-                    (this.Grain != null &&
-                    this.Grain.Equals(input.Grain))
-                ) && 
-                (
-                    this.Pages == input.Pages ||
-                    this.Pages != null &&
-                    input.Pages != null &&
-                    this.Pages.SequenceEqual(input.Pages)
-                ) && 
-                (
-                    this.ProcessSettings == input.ProcessSettings ||
-                    this.ProcessSettings != null &&
-                    input.ProcessSettings != null &&
-                    this.ProcessSettings.SequenceEqual(input.ProcessSettings)
-                ) && 
-                (
-                    this.Rotation == input.Rotation ||
-                    (this.Rotation != null &&
-                    this.Rotation.Equals(input.Rotation))
-                ) && 
+            return base.Equals(input) &&
                 (
                     this.DieDesign == input.DieDesign ||
                     (this.DieDesign != null &&
                     this.DieDesign.Equals(input.DieDesign))
-                ) && 
+                ) &&
                 (
                     this.Tiling == input.Tiling ||
                     (this.Tiling != null &&
                     this.Tiling.Equals(input.Tiling))
-                ) && 
+                ) &&
                 (
                     this.Tiles == input.Tiles ||
                     this.Tiles != null &&
                     input.Tiles != null &&
                     this.Tiles.SequenceEqual(input.Tiles)
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
-                ) && 
-                (
-                    this.Material == input.Material ||
-                    (this.Material != null &&
-                    this.Material.Equals(input.Material))
-                ) && 
-                (
-                    this.Processes == input.Processes ||
-                    this.Processes != null &&
-                    input.Processes != null &&
-                    this.Processes.SequenceEqual(input.Processes)
                 );
         }
 
@@ -390,31 +169,13 @@ namespace TiliaLabs.Phoenix.Model
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Id != null)
-                    hashCode = hashCode * 59 + this.Id.GetHashCode();
-                if (this.Name != null)
-                    hashCode = hashCode * 59 + this.Name.GetHashCode();
-                if (this.Grain != null)
-                    hashCode = hashCode * 59 + this.Grain.GetHashCode();
-                if (this.Pages != null)
-                    hashCode = hashCode * 59 + this.Pages.GetHashCode();
-                if (this.ProcessSettings != null)
-                    hashCode = hashCode * 59 + this.ProcessSettings.GetHashCode();
-                if (this.Rotation != null)
-                    hashCode = hashCode * 59 + this.Rotation.GetHashCode();
+                int hashCode = base.GetHashCode();
                 if (this.DieDesign != null)
                     hashCode = hashCode * 59 + this.DieDesign.GetHashCode();
                 if (this.Tiling != null)
                     hashCode = hashCode * 59 + this.Tiling.GetHashCode();
                 if (this.Tiles != null)
                     hashCode = hashCode * 59 + this.Tiles.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
-                if (this.Material != null)
-                    hashCode = hashCode * 59 + this.Material.GetHashCode();
-                if (this.Processes != null)
-                    hashCode = hashCode * 59 + this.Processes.GetHashCode();
                 return hashCode;
             }
         }

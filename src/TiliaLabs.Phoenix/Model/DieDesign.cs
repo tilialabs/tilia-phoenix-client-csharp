@@ -76,15 +76,7 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="path">Path.</param>
         public DieDesign(string name = default(string), string description = default(string), string notes = default(string), TypeEnum? type = default(TypeEnum?), string source = default(string), string filePath = default(string), string shapeSource = default(string), Path shape = default(Path), Bleedline bleedline = default(Bleedline), List<Dieline> dielines = default(List<Dieline>), string shapeId = default(string), Rect rect = default(Rect), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for DieDesign and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
+            this.Name = name;
             this.Description = description;
             this.Notes = notes;
             this.Type = type;

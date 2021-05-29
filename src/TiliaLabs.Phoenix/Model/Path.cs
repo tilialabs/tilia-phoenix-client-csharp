@@ -27,14 +27,18 @@ namespace TiliaLabs.Phoenix.Model
     /// Path
     /// </summary>
     [DataContract]
-        public partial class Path :  IEquatable<Path>, IValidatableObject
+    [JsonConverter(typeof(PathConverter))]
+    public partial class Path :  IEquatable<Path>, IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Path" /> class.
         /// </summary>
-        public Path()
+        public Path(string value = default(string))
         {
+            Value = value;
         }
+
+        public string Value { get; set; }
         
         /// <summary>
         /// Returns the string presentation of the object
@@ -101,6 +105,28 @@ namespace TiliaLabs.Phoenix.Model
         IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
             yield break;
+        }
+
+        class PathConverter : JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(Path);
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, 
+                JsonSerializer serializer)
+            {
+                string value = reader.Value as string;
+                return new Path(value);
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, 
+                JsonSerializer serializer)
+            {
+                Path path = value as Path;
+                writer.WriteValue(path.Value);
+            }
         }
     }
 }

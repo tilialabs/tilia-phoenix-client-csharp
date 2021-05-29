@@ -39,15 +39,15 @@ namespace TiliaLabs.Phoenix.Model
                 public enum TypeEnum
         {
             /// <summary>
-            /// Enum Standard for value: Standard
+            /// Enum StandardTiling for value: StandardTiling
             /// </summary>
-            [EnumMember(Value = "Standard")]
-            Standard = 1,
+            [EnumMember(Value = "StandardTiling")]
+            StandardTiling = 1,
             /// <summary>
             /// Enum Custom for value: Custom
             /// </summary>
-            [EnumMember(Value = "Custom")]
-            Custom = 2        }
+            [EnumMember(Value = "CustomTiling")]
+            CustomTiling = 2        }
         /// <summary>
         /// Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types
         /// </summary>

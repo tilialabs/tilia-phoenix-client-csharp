@@ -27,41 +27,8 @@ namespace TiliaLabs.Phoenix.Model
     /// Bound part for creating books
     /// </summary>
     [DataContract]
-        public partial class BoundPart :  IEquatable<BoundPart>, IValidatableObject
+        public partial class BoundPart : PartObject, IEquatable<BoundPart>, IValidatableObject
     {
-        /// <summary>
-        /// Part grain
-        /// </summary>
-        /// <value>Part grain</value>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum GrainEnum
-        {
-            /// <summary>
-            /// Enum Horizontal for value: Horizontal
-            /// </summary>
-            [EnumMember(Value = "Horizontal")]
-            Horizontal = 1,
-            /// <summary>
-            /// Enum Vertical for value: Vertical
-            /// </summary>
-            [EnumMember(Value = "Vertical")]
-            Vertical = 2,
-            /// <summary>
-            /// Enum Consistent for value: Consistent
-            /// </summary>
-            [EnumMember(Value = "Consistent")]
-            Consistent = 3,
-            /// <summary>
-            /// Enum None for value: None
-            /// </summary>
-            [EnumMember(Value = "None")]
-            None = 4        }
-        /// <summary>
-        /// Part grain
-        /// </summary>
-        /// <value>Part grain</value>
-        [DataMember(Name="grain", EmitDefaultValue=false)]
-        public GrainEnum Grain { get; set; }
         /// <summary>
         /// Binding method of this part
         /// </summary>
@@ -180,36 +147,9 @@ namespace TiliaLabs.Phoenix.Model
         [DataMember(Name="reading-order", EmitDefaultValue=false)]
         public ReadingOrderEnum ReadingOrder { get; set; }
         /// <summary>
-        /// Defines Type
+        /// Gets Type
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum Flat for value: Flat
-            /// </summary>
-            [EnumMember(Value = "Flat")]
-            Flat = 1,
-            /// <summary>
-            /// Enum Bound for value: Bound
-            /// </summary>
-            [EnumMember(Value = "Bound")]
-            Bound = 2,
-            /// <summary>
-            /// Enum Folded for value: Folded
-            /// </summary>
-            [EnumMember(Value = "Folded")]
-            Folded = 3,
-            /// <summary>
-            /// Enum Tiled for value: Tiled
-            /// </summary>
-            [EnumMember(Value = "Tiled")]
-            Tiled = 4        }
-        /// <summary>
-        /// Gets or Sets Type
-        /// </summary>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public override TypeEnum Type { get; } = TypeEnum.Bound;
         /// <summary>
         /// Initializes a new instance of the <see cref="BoundPart" /> class.
         /// </summary>
@@ -229,56 +169,11 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="trim">trim (required).</param>
         /// <param name="creep">creep (required).</param>
         /// <param name="allowedFolds">Allowed folds in this part.</param>
-        /// <param name="type">type (required).</param>
         /// <param name="material">material.</param>
         /// <param name="processes">Part processes.</param>
-        public BoundPart(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), Size pageSize = default(Size), List<BoundSection> sections = default(List<BoundSection>), BindingMethodEnum bindingMethod = default(BindingMethodEnum), int? pagesPerSection = default(int?), BindingEdgeEnum bindingEdge = default(BindingEdgeEnum), JogEdgeEnum jogEdge = default(JogEdgeEnum), ReadingOrderEnum readingOrder = default(ReadingOrderEnum), bool? selfCover = default(bool?), Trim trim = default(Trim), Creep creep = default(Creep), List<FoldingPattern> allowedFolds = default(List<FoldingPattern>), TypeEnum type = default(TypeEnum), Material material = default(Material), List<Process> processes = default(List<Process>))
+        public BoundPart(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), Size pageSize = default(Size), List<BoundSection> sections = default(List<BoundSection>), BindingMethodEnum bindingMethod = default(BindingMethodEnum), int? pagesPerSection = default(int?), BindingEdgeEnum bindingEdge = default(BindingEdgeEnum), JogEdgeEnum jogEdge = default(JogEdgeEnum), ReadingOrderEnum readingOrder = default(ReadingOrderEnum), bool? selfCover = default(bool?), Trim trim = default(Trim), Creep creep = default(Creep), List<FoldingPattern> allowedFolds = default(List<FoldingPattern>), Material material = default(Material), List<Process> processes = default(List<Process>))
+            : base(name, grain, pages, processSettings, rotation, material, processes)
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for BoundPart and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
-            // to ensure "grain" is required (not null)
-            if (grain == null)
-            {
-                throw new InvalidDataException("grain is a required property for BoundPart and cannot be null");
-            }
-            else
-            {
-                this.Grain = grain;
-            }
-            // to ensure "pages" is required (not null)
-            if (pages == null)
-            {
-                throw new InvalidDataException("pages is a required property for BoundPart and cannot be null");
-            }
-            else
-            {
-                this.Pages = pages;
-            }
-            // to ensure "processSettings" is required (not null)
-            if (processSettings == null)
-            {
-                throw new InvalidDataException("processSettings is a required property for BoundPart and cannot be null");
-            }
-            else
-            {
-                this.ProcessSettings = processSettings;
-            }
-            // to ensure "rotation" is required (not null)
-            if (rotation == null)
-            {
-                throw new InvalidDataException("rotation is a required property for BoundPart and cannot be null");
-            }
-            else
-            {
-                this.Rotation = rotation;
-            }
             // to ensure "pageSize" is required (not null)
             if (pageSize == null)
             {
@@ -360,56 +255,10 @@ namespace TiliaLabs.Phoenix.Model
             {
                 this.Creep = creep;
             }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for BoundPart and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
             this.PagesPerSection = pagesPerSection;
             this.AllowedFolds = allowedFolds;
-            this.Material = material;
-            this.Processes = processes;
         }
         
-        /// <summary>
-        /// Unique ID
-        /// </summary>
-        /// <value>Unique ID</value>
-        [DataMember(Name="id", EmitDefaultValue=false)]
-        public string Id { get; private set; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
-        /// <value>Name</value>
-        [DataMember(Name="name", EmitDefaultValue=false)]
-        public string Name { get; set; }
-
-
-        /// <summary>
-        /// Part pages
-        /// </summary>
-        /// <value>Part pages</value>
-        [DataMember(Name="pages", EmitDefaultValue=false)]
-        public List<Page> Pages { get; set; }
-
-        /// <summary>
-        /// Part process settings
-        /// </summary>
-        /// <value>Part process settings</value>
-        [DataMember(Name="process-settings", EmitDefaultValue=false)]
-        public List<ProcessSetting> ProcessSettings { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Rotation
-        /// </summary>
-        [DataMember(Name="rotation", EmitDefaultValue=false)]
-        public Rotation Rotation { get; set; }
-
         /// <summary>
         /// Gets or Sets PageSize
         /// </summary>
@@ -430,9 +279,6 @@ namespace TiliaLabs.Phoenix.Model
         /// <value>Pages per section in this part</value>
         [DataMember(Name="pages-per-section", EmitDefaultValue=false)]
         public int? PagesPerSection { get; set; }
-
-
-
 
         /// <summary>
         /// Whether this part has a self cover or not
@@ -459,21 +305,7 @@ namespace TiliaLabs.Phoenix.Model
         /// <value>Allowed folds in this part</value>
         [DataMember(Name="allowed-folds", EmitDefaultValue=false)]
         public List<FoldingPattern> AllowedFolds { get; set; }
-
-
-        /// <summary>
-        /// Gets or Sets Material
-        /// </summary>
-        [DataMember(Name="material", EmitDefaultValue=false)]
-        public Material Material { get; set; }
-
-        /// <summary>
-        /// Part processes
-        /// </summary>
-        /// <value>Part processes</value>
-        [DataMember(Name="processes", EmitDefaultValue=false)]
-        public List<Process> Processes { get; set; }
-
+        
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
@@ -507,15 +339,6 @@ namespace TiliaLabs.Phoenix.Model
         }
   
         /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-
-        /// <summary>
         /// Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
@@ -535,111 +358,63 @@ namespace TiliaLabs.Phoenix.Model
             if (input == null)
                 return false;
 
-            return 
-                (
-                    this.Id == input.Id ||
-                    (this.Id != null &&
-                    this.Id.Equals(input.Id))
-                ) && 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.Grain == input.Grain ||
-                    (this.Grain != null &&
-                    this.Grain.Equals(input.Grain))
-                ) && 
-                (
-                    this.Pages == input.Pages ||
-                    this.Pages != null &&
-                    input.Pages != null &&
-                    this.Pages.SequenceEqual(input.Pages)
-                ) && 
-                (
-                    this.ProcessSettings == input.ProcessSettings ||
-                    this.ProcessSettings != null &&
-                    input.ProcessSettings != null &&
-                    this.ProcessSettings.SequenceEqual(input.ProcessSettings)
-                ) && 
-                (
-                    this.Rotation == input.Rotation ||
-                    (this.Rotation != null &&
-                    this.Rotation.Equals(input.Rotation))
-                ) && 
+            return base.Equals(input) &&
                 (
                     this.PageSize == input.PageSize ||
                     (this.PageSize != null &&
                     this.PageSize.Equals(input.PageSize))
-                ) && 
+                ) &&
                 (
                     this.Sections == input.Sections ||
                     this.Sections != null &&
                     input.Sections != null &&
                     this.Sections.SequenceEqual(input.Sections)
-                ) && 
+                ) &&
                 (
                     this.BindingMethod == input.BindingMethod ||
                     (this.BindingMethod != null &&
                     this.BindingMethod.Equals(input.BindingMethod))
-                ) && 
+                ) &&
                 (
                     this.PagesPerSection == input.PagesPerSection ||
                     (this.PagesPerSection != null &&
                     this.PagesPerSection.Equals(input.PagesPerSection))
-                ) && 
+                ) &&
                 (
                     this.BindingEdge == input.BindingEdge ||
                     (this.BindingEdge != null &&
                     this.BindingEdge.Equals(input.BindingEdge))
-                ) && 
+                ) &&
                 (
                     this.JogEdge == input.JogEdge ||
                     (this.JogEdge != null &&
                     this.JogEdge.Equals(input.JogEdge))
-                ) && 
+                ) &&
                 (
                     this.ReadingOrder == input.ReadingOrder ||
                     (this.ReadingOrder != null &&
                     this.ReadingOrder.Equals(input.ReadingOrder))
-                ) && 
+                ) &&
                 (
                     this.SelfCover == input.SelfCover ||
                     (this.SelfCover != null &&
                     this.SelfCover.Equals(input.SelfCover))
-                ) && 
+                ) &&
                 (
                     this.Trim == input.Trim ||
                     (this.Trim != null &&
                     this.Trim.Equals(input.Trim))
-                ) && 
+                ) &&
                 (
                     this.Creep == input.Creep ||
                     (this.Creep != null &&
                     this.Creep.Equals(input.Creep))
-                ) && 
+                ) &&
                 (
                     this.AllowedFolds == input.AllowedFolds ||
                     this.AllowedFolds != null &&
                     input.AllowedFolds != null &&
                     this.AllowedFolds.SequenceEqual(input.AllowedFolds)
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
-                ) && 
-                (
-                    this.Material == input.Material ||
-                    (this.Material != null &&
-                    this.Material.Equals(input.Material))
-                ) && 
-                (
-                    this.Processes == input.Processes ||
-                    this.Processes != null &&
-                    input.Processes != null &&
-                    this.Processes.SequenceEqual(input.Processes)
                 );
         }
 
@@ -651,19 +426,7 @@ namespace TiliaLabs.Phoenix.Model
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Id != null)
-                    hashCode = hashCode * 59 + this.Id.GetHashCode();
-                if (this.Name != null)
-                    hashCode = hashCode * 59 + this.Name.GetHashCode();
-                if (this.Grain != null)
-                    hashCode = hashCode * 59 + this.Grain.GetHashCode();
-                if (this.Pages != null)
-                    hashCode = hashCode * 59 + this.Pages.GetHashCode();
-                if (this.ProcessSettings != null)
-                    hashCode = hashCode * 59 + this.ProcessSettings.GetHashCode();
-                if (this.Rotation != null)
-                    hashCode = hashCode * 59 + this.Rotation.GetHashCode();
+                int hashCode = base.GetHashCode();
                 if (this.PageSize != null)
                     hashCode = hashCode * 59 + this.PageSize.GetHashCode();
                 if (this.Sections != null)
@@ -686,12 +449,6 @@ namespace TiliaLabs.Phoenix.Model
                     hashCode = hashCode * 59 + this.Creep.GetHashCode();
                 if (this.AllowedFolds != null)
                     hashCode = hashCode * 59 + this.AllowedFolds.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
-                if (this.Material != null)
-                    hashCode = hashCode * 59 + this.Material.GetHashCode();
-                if (this.Processes != null)
-                    hashCode = hashCode * 59 + this.Processes.GetHashCode();
                 return hashCode;
             }
         }

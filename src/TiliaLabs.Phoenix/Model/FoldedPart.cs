@@ -27,72 +27,12 @@ namespace TiliaLabs.Phoenix.Model
     /// Folded parts for creating folded work such as brochures
     /// </summary>
     [DataContract]
-        public partial class FoldedPart :  IEquatable<FoldedPart>, IValidatableObject
+        public partial class FoldedPart : PartObject, IEquatable<FoldedPart>, IValidatableObject
     {
         /// <summary>
-        /// Part grain
+        /// Gets Type
         /// </summary>
-        /// <value>Part grain</value>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum GrainEnum
-        {
-            /// <summary>
-            /// Enum Horizontal for value: Horizontal
-            /// </summary>
-            [EnumMember(Value = "Horizontal")]
-            Horizontal = 1,
-            /// <summary>
-            /// Enum Vertical for value: Vertical
-            /// </summary>
-            [EnumMember(Value = "Vertical")]
-            Vertical = 2,
-            /// <summary>
-            /// Enum Consistent for value: Consistent
-            /// </summary>
-            [EnumMember(Value = "Consistent")]
-            Consistent = 3,
-            /// <summary>
-            /// Enum None for value: None
-            /// </summary>
-            [EnumMember(Value = "None")]
-            None = 4        }
-        /// <summary>
-        /// Part grain
-        /// </summary>
-        /// <value>Part grain</value>
-        [DataMember(Name="grain", EmitDefaultValue=false)]
-        public GrainEnum Grain { get; set; }
-        /// <summary>
-        /// Defines Type
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum Flat for value: Flat
-            /// </summary>
-            [EnumMember(Value = "Flat")]
-            Flat = 1,
-            /// <summary>
-            /// Enum Bound for value: Bound
-            /// </summary>
-            [EnumMember(Value = "Bound")]
-            Bound = 2,
-            /// <summary>
-            /// Enum Folded for value: Folded
-            /// </summary>
-            [EnumMember(Value = "Folded")]
-            Folded = 3,
-            /// <summary>
-            /// Enum Tiled for value: Tiled
-            /// </summary>
-            [EnumMember(Value = "Tiled")]
-            Tiled = 4        }
-        /// <summary>
-        /// Gets or Sets Type
-        /// </summary>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public override TypeEnum Type { get; } = TypeEnum.Folded;
         /// <summary>
         /// Initializes a new instance of the <see cref="FoldedPart" /> class.
         /// </summary>
@@ -102,133 +42,20 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="processSettings">Part process settings (required).</param>
         /// <param name="rotation">rotation (required).</param>
         /// <param name="pageSize">pageSize (required).</param>
-        /// <param name="type">type (required).</param>
         /// <param name="material">material.</param>
         /// <param name="processes">Part processes.</param>
-        public FoldedPart(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), Size pageSize = default(Size), TypeEnum type = default(TypeEnum), Material material = default(Material), List<Process> processes = default(List<Process>))
+        public FoldedPart(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), Size pageSize = default(Size), Material material = default(Material), List<Process> processes = default(List<Process>))
+            : base(name, grain, pages, processSettings, rotation, material, processes)
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for FoldedPart and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
-            // to ensure "grain" is required (not null)
-            if (grain == null)
-            {
-                throw new InvalidDataException("grain is a required property for FoldedPart and cannot be null");
-            }
-            else
-            {
-                this.Grain = grain;
-            }
-            // to ensure "pages" is required (not null)
-            if (pages == null)
-            {
-                throw new InvalidDataException("pages is a required property for FoldedPart and cannot be null");
-            }
-            else
-            {
-                this.Pages = pages;
-            }
-            // to ensure "processSettings" is required (not null)
-            if (processSettings == null)
-            {
-                throw new InvalidDataException("processSettings is a required property for FoldedPart and cannot be null");
-            }
-            else
-            {
-                this.ProcessSettings = processSettings;
-            }
-            // to ensure "rotation" is required (not null)
-            if (rotation == null)
-            {
-                throw new InvalidDataException("rotation is a required property for FoldedPart and cannot be null");
-            }
-            else
-            {
-                this.Rotation = rotation;
-            }
-            // to ensure "pageSize" is required (not null)
-            if (pageSize == null)
-            {
-                throw new InvalidDataException("pageSize is a required property for FoldedPart and cannot be null");
-            }
-            else
-            {
-                this.PageSize = pageSize;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for FoldedPart and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
-            this.Material = material;
-            this.Processes = processes;
+            PageSize = pageSize;
         }
-        
-        /// <summary>
-        /// Unique ID
-        /// </summary>
-        /// <value>Unique ID</value>
-        [DataMember(Name="id", EmitDefaultValue=false)]
-        public string Id { get; private set; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
-        /// <value>Name</value>
-        [DataMember(Name="name", EmitDefaultValue=false)]
-        public string Name { get; set; }
-
-
-        /// <summary>
-        /// Part pages
-        /// </summary>
-        /// <value>Part pages</value>
-        [DataMember(Name="pages", EmitDefaultValue=false)]
-        public List<Page> Pages { get; set; }
-
-        /// <summary>
-        /// Part process settings
-        /// </summary>
-        /// <value>Part process settings</value>
-        [DataMember(Name="process-settings", EmitDefaultValue=false)]
-        public List<ProcessSetting> ProcessSettings { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Rotation
-        /// </summary>
-        [DataMember(Name="rotation", EmitDefaultValue=false)]
-        public Rotation Rotation { get; set; }
 
         /// <summary>
         /// Gets or Sets PageSize
         /// </summary>
         [DataMember(Name="page-size", EmitDefaultValue=false)]
         public Size PageSize { get; set; }
-
-
-        /// <summary>
-        /// Gets or Sets Material
-        /// </summary>
-        [DataMember(Name="material", EmitDefaultValue=false)]
-        public Material Material { get; set; }
-
-        /// <summary>
-        /// Part processes
-        /// </summary>
-        /// <value>Part processes</value>
-        [DataMember(Name="processes", EmitDefaultValue=false)]
-        public List<Process> Processes { get; set; }
-
+        
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
@@ -249,15 +76,6 @@ namespace TiliaLabs.Phoenix.Model
             sb.Append("  Processes: ").Append(Processes).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
-        }
-  
-        /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
         /// <summary>
@@ -280,59 +98,11 @@ namespace TiliaLabs.Phoenix.Model
             if (input == null)
                 return false;
 
-            return 
-                (
-                    this.Id == input.Id ||
-                    (this.Id != null &&
-                    this.Id.Equals(input.Id))
-                ) && 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.Grain == input.Grain ||
-                    (this.Grain != null &&
-                    this.Grain.Equals(input.Grain))
-                ) && 
-                (
-                    this.Pages == input.Pages ||
-                    this.Pages != null &&
-                    input.Pages != null &&
-                    this.Pages.SequenceEqual(input.Pages)
-                ) && 
-                (
-                    this.ProcessSettings == input.ProcessSettings ||
-                    this.ProcessSettings != null &&
-                    input.ProcessSettings != null &&
-                    this.ProcessSettings.SequenceEqual(input.ProcessSettings)
-                ) && 
-                (
-                    this.Rotation == input.Rotation ||
-                    (this.Rotation != null &&
-                    this.Rotation.Equals(input.Rotation))
-                ) && 
+            return base.Equals(input) &&
                 (
                     this.PageSize == input.PageSize ||
                     (this.PageSize != null &&
                     this.PageSize.Equals(input.PageSize))
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
-                ) && 
-                (
-                    this.Material == input.Material ||
-                    (this.Material != null &&
-                    this.Material.Equals(input.Material))
-                ) && 
-                (
-                    this.Processes == input.Processes ||
-                    this.Processes != null &&
-                    input.Processes != null &&
-                    this.Processes.SequenceEqual(input.Processes)
                 );
         }
 
@@ -344,27 +114,9 @@ namespace TiliaLabs.Phoenix.Model
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Id != null)
-                    hashCode = hashCode * 59 + this.Id.GetHashCode();
-                if (this.Name != null)
-                    hashCode = hashCode * 59 + this.Name.GetHashCode();
-                if (this.Grain != null)
-                    hashCode = hashCode * 59 + this.Grain.GetHashCode();
-                if (this.Pages != null)
-                    hashCode = hashCode * 59 + this.Pages.GetHashCode();
-                if (this.ProcessSettings != null)
-                    hashCode = hashCode * 59 + this.ProcessSettings.GetHashCode();
-                if (this.Rotation != null)
-                    hashCode = hashCode * 59 + this.Rotation.GetHashCode();
+                int hashCode = base.GetHashCode();
                 if (this.PageSize != null)
                     hashCode = hashCode * 59 + this.PageSize.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
-                if (this.Material != null)
-                    hashCode = hashCode * 59 + this.Material.GetHashCode();
-                if (this.Processes != null)
-                    hashCode = hashCode * 59 + this.Processes.GetHashCode();
                 return hashCode;
             }
         }

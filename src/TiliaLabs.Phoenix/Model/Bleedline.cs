@@ -37,10 +37,10 @@ namespace TiliaLabs.Phoenix.Model
                 public enum TypeEnum
         {
             /// <summary>
-            /// Enum Margins for value: Margins
+            /// Enum Rectangle for value: Rectangle
             /// </summary>
-            [EnumMember(Value = "Margins")]
-            Margins = 1,
+            [EnumMember(Value = "Rectangle")]
+            Rectangle = 1,
             /// <summary>
             /// Enum Contour for value: Contour
             /// </summary>
@@ -82,15 +82,7 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="path">Path.</param>
         public Bleedline(string name = default(string), string description = default(string), string notes = default(string), DielineSource source = default(DielineSource), Path shape = default(Path), double? thickness = default(double?), Rect rect = default(Rect), TypeEnum type = default(TypeEnum), string bleedSource = default(string), string margin = default(string), Margins margins = default(Margins), bool? shapeModified = default(bool?), bool? marginsAdjusted = default(bool?), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for Bleedline and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
+            Name = name;
             // to ensure "shape" is required (not null)
             if (shape == null)
             {

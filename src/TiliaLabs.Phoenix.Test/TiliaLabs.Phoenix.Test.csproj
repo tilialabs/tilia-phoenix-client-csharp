@@ -75,6 +75,7 @@ OpenAPI spec version: 7.0.6
     <Compile Include="**\*.cs" Exclude="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="mix-job.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MsBuildToolsPath)\Microsoft.CSharp.targets" />

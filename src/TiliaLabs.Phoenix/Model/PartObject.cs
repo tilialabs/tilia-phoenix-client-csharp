@@ -28,8 +28,12 @@ namespace TiliaLabs.Phoenix.Model
     /// Part - base object for product 2.0 part model
     /// </summary>
     [DataContract]
-    [JsonConverter(typeof(JsonSubtypes), "Type")]
-        public partial class PartObject :  IEquatable<PartObject>, IValidatableObject
+    [JsonConverter(typeof(JsonSubtypes), "type")]
+    [JsonSubtypes.KnownSubType(typeof(BoundPart), TypeEnum.Bound)]
+    [JsonSubtypes.KnownSubType(typeof(FlatPart), TypeEnum.Flat)]
+    [JsonSubtypes.KnownSubType(typeof(FoldedPart), TypeEnum.Folded)]
+    [JsonSubtypes.KnownSubType(typeof(TiledPart), TypeEnum.Tiled)]
+    public abstract class PartObject :  IEquatable<PartObject>, IValidatableObject
     {
         /// <summary>
         /// Part grain
@@ -57,7 +61,9 @@ namespace TiliaLabs.Phoenix.Model
             /// Enum None for value: None
             /// </summary>
             [EnumMember(Value = "None")]
-            None = 4        }
+            None = 4
+        }
+
         /// <summary>
         /// Part grain
         /// </summary>
@@ -68,7 +74,7 @@ namespace TiliaLabs.Phoenix.Model
         /// Defines Type
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
+        public enum TypeEnum
         {
             /// <summary>
             /// Enum Flat for value: Flat
@@ -89,12 +95,13 @@ namespace TiliaLabs.Phoenix.Model
             /// Enum Tiled for value: Tiled
             /// </summary>
             [EnumMember(Value = "Tiled")]
-            Tiled = 4        }
+            Tiled = 4
+        }
         /// <summary>
-        /// Gets or Sets Type
+        /// Gets Type
         /// </summary>
         [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public virtual TypeEnum Type { get; }
         /// <summary>
         /// Initializes a new instance of the <see cref="PartObject" /> class.
         /// </summary>
@@ -105,8 +112,7 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="rotation">rotation (required).</param>
         /// <param name="material">material.</param>
         /// <param name="processes">Part processes.</param>
-        /// <param name="type">type (required).</param>
-        public PartObject(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), Material material = default(Material), List<Process> processes = default(List<Process>), TypeEnum type = default(TypeEnum))
+        public PartObject(string name = default(string), GrainEnum grain = default(GrainEnum), List<Page> pages = default(List<Page>), List<ProcessSetting> processSettings = default(List<ProcessSetting>), Rotation rotation = default(Rotation), Material material = default(Material), List<Process> processes = default(List<Process>))
         {
             // to ensure "name" is required (not null)
             if (name == null)
@@ -152,15 +158,6 @@ namespace TiliaLabs.Phoenix.Model
             else
             {
                 this.Rotation = rotation;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for PartObject and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
             }
             this.Material = material;
             this.Processes = processes;
@@ -308,11 +305,6 @@ namespace TiliaLabs.Phoenix.Model
                     this.Processes != null &&
                     input.Processes != null &&
                     this.Processes.SequenceEqual(input.Processes)
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
                 );
         }
 
@@ -341,8 +333,6 @@ namespace TiliaLabs.Phoenix.Model
                     hashCode = hashCode * 59 + this.Material.GetHashCode();
                 if (this.Processes != null)
                     hashCode = hashCode * 59 + this.Processes.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
                 return hashCode;
             }
         }
