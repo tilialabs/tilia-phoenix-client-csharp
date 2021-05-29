@@ -28,8 +28,10 @@ namespace TiliaLabs.Phoenix.Model
     /// Tiling method
     /// </summary>
     [DataContract]
-    [JsonConverter(typeof(JsonSubtypes), "Type")]
-        public partial class TilingMethod :  IEquatable<TilingMethod>, IValidatableObject
+    [JsonConverter(typeof(JsonSubtypes), "type")]
+    [JsonSubtypes.KnownSubType(typeof(GapTiling), TypeEnum.Gap)]
+    [JsonSubtypes.KnownSubType(typeof(OverlapTiling), TypeEnum.Overlap)]
+    public abstract class TilingMethod :  IEquatable<TilingMethod>, IValidatableObject
     {
         /// <summary>
         /// Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type
@@ -58,24 +60,7 @@ namespace TiliaLabs.Phoenix.Model
         /// </summary>
         /// <value>Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type</value>
         [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TilingMethod" /> class.
-        /// </summary>
-        /// <param name="type">Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type (required).</param>
-        public TilingMethod(TypeEnum type = default(TypeEnum))
-        {
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for TilingMethod and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
-        }
-        
+        public virtual TypeEnum Type { get; }
 
         /// <summary>
         /// Returns the string presentation of the object

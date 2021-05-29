@@ -27,47 +27,18 @@ namespace TiliaLabs.Phoenix.Model
     /// Variable sizes tiling rule
     /// </summary>
     [DataContract]
-        public partial class VariableSizesRule :  IEquatable<VariableSizesRule>, IValidatableObject
+        public partial class VariableSizesRule : TilingRule, IEquatable<VariableSizesRule>, IValidatableObject
     {
         /// <summary>
         /// Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule
         /// </summary>
         /// <value>Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule</value>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum None for value: None
-            /// </summary>
-            [EnumMember(Value = "None")]
-            None = 1,
-            /// <summary>
-            /// Enum FixedNumber for value: Fixed Number
-            /// </summary>
-            [EnumMember(Value = "Fixed Number")]
-            FixedNumber = 2,
-            /// <summary>
-            /// Enum FixedSize for value: Fixed Size
-            /// </summary>
-            [EnumMember(Value = "Fixed Size")]
-            FixedSize = 3,
-            /// <summary>
-            /// Enum VariableSizes for value: Variable Sizes
-            /// </summary>
-            [EnumMember(Value = "Variable Sizes")]
-            VariableSizes = 4        }
-        /// <summary>
-        /// Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule
-        /// </summary>
-        /// <value>Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule</value>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public override TypeEnum Type { get; } = TypeEnum.VariableSizes;
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableSizesRule" /> class.
         /// </summary>
         /// <param name="sizes">Custom sizes to use to create tiles in the given dimension (required).</param>
-        /// <param name="type">Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule (required).</param>
-        public VariableSizesRule(List<double?> sizes = default(List<double?>), TypeEnum type = default(TypeEnum))
+        public VariableSizesRule(List<double?> sizes = default(List<double?>))
         {
             // to ensure "sizes" is required (not null)
             if (sizes == null)
@@ -77,15 +48,6 @@ namespace TiliaLabs.Phoenix.Model
             else
             {
                 this.Sizes = sizes;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for VariableSizesRule and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
             }
         }
         
@@ -110,15 +72,6 @@ namespace TiliaLabs.Phoenix.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
-        /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
 
         /// <summary>
         /// Returns true if objects are equal
@@ -140,17 +93,12 @@ namespace TiliaLabs.Phoenix.Model
             if (input == null)
                 return false;
 
-            return 
+            return base.Equals(input) &&
                 (
                     this.Sizes == input.Sizes ||
                     this.Sizes != null &&
                     input.Sizes != null &&
                     this.Sizes.SequenceEqual(input.Sizes)
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
                 );
         }
 
@@ -162,11 +110,9 @@ namespace TiliaLabs.Phoenix.Model
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
+                int hashCode = base.GetHashCode();
                 if (this.Sizes != null)
                     hashCode = hashCode * 59 + this.Sizes.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
                 return hashCode;
             }
         }

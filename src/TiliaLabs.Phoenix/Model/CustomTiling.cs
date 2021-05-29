@@ -27,31 +27,13 @@ namespace TiliaLabs.Phoenix.Model
     /// Custom tiling where each tile is explicitly defined
     /// </summary>
     [DataContract]
-        public partial class CustomTiling :  IEquatable<CustomTiling>, IValidatableObject
+    public partial class CustomTiling : Tiling, IEquatable<CustomTiling>, IValidatableObject
     {
         /// <summary>
         /// Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types
         /// </summary>
         /// <value>Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types</value>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum StandardTiling for value: StandardTiling
-            /// </summary>
-            [EnumMember(Value = "StandardTiling")]
-            StandardTiling = 1,
-            /// <summary>
-            /// Enum CustomTiling for value: CustomTiling
-            /// </summary>
-            [EnumMember(Value = "CustomTiling")]
-            CustomTiling = 2        }
-        /// <summary>
-        /// Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types
-        /// </summary>
-        /// <value>Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types</value>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public override TypeEnum Type { get; } = TypeEnum.CustomTiling;
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomTiling" /> class.
         /// </summary>
@@ -59,107 +41,20 @@ namespace TiliaLabs.Phoenix.Model
         /// <param name="description">Description.</param>
         /// <param name="notes">Notes.</param>
         /// <param name="tile">Custom tiles.</param>
-        /// <param name="type">Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types (required).</param>
         /// <param name="properties">Custom properties.</param>
         /// <param name="path">Path.</param>
-        public CustomTiling(string name = default(string), string description = default(string), string notes = default(string), List<Tile> tile = default(List<Tile>), TypeEnum type = default(TypeEnum), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
+        public CustomTiling(string name = default(string), string description = default(string), string notes = default(string), List<Tile> tile = default(List<Tile>), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
+            : base(name, description, notes, properties, path)
         {
-            // to ensure "name" is required (not null)
-            if (name == null)
-            {
-                throw new InvalidDataException("name is a required property for CustomTiling and cannot be null");
-            }
-            else
-            {
-                this.Name = name;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for CustomTiling and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
-            this.Description = description;
-            this.Notes = notes;
             this.Tile = tile;
-            this.Properties = properties;
-            this.Path = path;
         }
-        
-        /// <summary>
-        /// Unique ID
-        /// </summary>
-        /// <value>Unique ID</value>
-        [DataMember(Name="id", EmitDefaultValue=false)]
-        public string Id { get; private set; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
-        /// <value>Name</value>
-        [DataMember(Name="name", EmitDefaultValue=false)]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Created On
-        /// </summary>
-        /// <value>Created On</value>
-        [DataMember(Name="created-on", EmitDefaultValue=false)]
-        public DateTime? CreatedOn { get; private set; }
-
-        /// <summary>
-        /// Modified On
-        /// </summary>
-        /// <value>Modified On</value>
-        [DataMember(Name="modified-on", EmitDefaultValue=false)]
-        public DateTime? ModifiedOn { get; private set; }
-
-        /// <summary>
-        /// Version
-        /// </summary>
-        /// <value>Version</value>
-        [DataMember(Name="version", EmitDefaultValue=false)]
-        public string Version { get; private set; }
-
-        /// <summary>
-        /// Description
-        /// </summary>
-        /// <value>Description</value>
-        [DataMember(Name="description", EmitDefaultValue=false)]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Notes
-        /// </summary>
-        /// <value>Notes</value>
-        [DataMember(Name="notes", EmitDefaultValue=false)]
-        public string Notes { get; set; }
-
         /// <summary>
         /// Custom tiles
         /// </summary>
         /// <value>Custom tiles</value>
         [DataMember(Name="tile", EmitDefaultValue=false)]
         public List<Tile> Tile { get; set; }
-
-
-        /// <summary>
-        /// Custom properties
-        /// </summary>
-        /// <value>Custom properties</value>
-        [DataMember(Name="properties", EmitDefaultValue=false)]
-        public List<PropertyObject> Properties { get; set; }
-
-        /// <summary>
-        /// Path
-        /// </summary>
-        /// <value>Path</value>
-        [DataMember(Name="path", EmitDefaultValue=false)]
-        public string Path { get; set; }
-
+        
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
@@ -182,15 +77,6 @@ namespace TiliaLabs.Phoenix.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
-        /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
 
         /// <summary>
         /// Returns true if objects are equal
@@ -212,63 +98,12 @@ namespace TiliaLabs.Phoenix.Model
             if (input == null)
                 return false;
 
-            return 
-                (
-                    this.Id == input.Id ||
-                    (this.Id != null &&
-                    this.Id.Equals(input.Id))
-                ) && 
-                (
-                    this.Name == input.Name ||
-                    (this.Name != null &&
-                    this.Name.Equals(input.Name))
-                ) && 
-                (
-                    this.CreatedOn == input.CreatedOn ||
-                    (this.CreatedOn != null &&
-                    this.CreatedOn.Equals(input.CreatedOn))
-                ) && 
-                (
-                    this.ModifiedOn == input.ModifiedOn ||
-                    (this.ModifiedOn != null &&
-                    this.ModifiedOn.Equals(input.ModifiedOn))
-                ) && 
-                (
-                    this.Version == input.Version ||
-                    (this.Version != null &&
-                    this.Version.Equals(input.Version))
-                ) && 
-                (
-                    this.Description == input.Description ||
-                    (this.Description != null &&
-                    this.Description.Equals(input.Description))
-                ) && 
-                (
-                    this.Notes == input.Notes ||
-                    (this.Notes != null &&
-                    this.Notes.Equals(input.Notes))
-                ) && 
+            return base.Equals(input) &&
                 (
                     this.Tile == input.Tile ||
                     this.Tile != null &&
                     input.Tile != null &&
                     this.Tile.SequenceEqual(input.Tile)
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
-                ) && 
-                (
-                    this.Properties == input.Properties ||
-                    this.Properties != null &&
-                    input.Properties != null &&
-                    this.Properties.SequenceEqual(input.Properties)
-                ) && 
-                (
-                    this.Path == input.Path ||
-                    (this.Path != null &&
-                    this.Path.Equals(input.Path))
                 );
         }
 
@@ -280,29 +115,9 @@ namespace TiliaLabs.Phoenix.Model
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
-                if (this.Id != null)
-                    hashCode = hashCode * 59 + this.Id.GetHashCode();
-                if (this.Name != null)
-                    hashCode = hashCode * 59 + this.Name.GetHashCode();
-                if (this.CreatedOn != null)
-                    hashCode = hashCode * 59 + this.CreatedOn.GetHashCode();
-                if (this.ModifiedOn != null)
-                    hashCode = hashCode * 59 + this.ModifiedOn.GetHashCode();
-                if (this.Version != null)
-                    hashCode = hashCode * 59 + this.Version.GetHashCode();
-                if (this.Description != null)
-                    hashCode = hashCode * 59 + this.Description.GetHashCode();
-                if (this.Notes != null)
-                    hashCode = hashCode * 59 + this.Notes.GetHashCode();
+                int hashCode = base.GetHashCode();
                 if (this.Tile != null)
                     hashCode = hashCode * 59 + this.Tile.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
-                if (this.Properties != null)
-                    hashCode = hashCode * 59 + this.Properties.GetHashCode();
-                if (this.Path != null)
-                    hashCode = hashCode * 59 + this.Path.GetHashCode();
                 return hashCode;
             }
         }

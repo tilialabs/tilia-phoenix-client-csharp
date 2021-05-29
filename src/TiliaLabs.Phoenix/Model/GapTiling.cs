@@ -27,7 +27,7 @@ namespace TiliaLabs.Phoenix.Model
     /// Gap tiling method creates gaps between tiles
     /// </summary>
     [DataContract]
-        public partial class GapTiling :  IEquatable<GapTiling>, IValidatableObject
+        public partial class GapTiling : TilingMethod, IEquatable<GapTiling>, IValidatableObject
     {
         /// <summary>
         /// Rule defining which direction(s) the extension is applied for each tile in the given direction
@@ -52,42 +52,19 @@ namespace TiliaLabs.Phoenix.Model
         /// <value>Rule defining which direction(s) the extension is applied for each tile in the given direction</value>
         [DataMember(Name="extension-rule", EmitDefaultValue=false)]
         public ExtensionRuleEnum? ExtensionRule { get; set; }
+
         /// <summary>
         /// Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type
         /// </summary>
         /// <value>Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type</value>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum None for value: None
-            /// </summary>
-            [EnumMember(Value = "None")]
-            None = 1,
-            /// <summary>
-            /// Enum Gap for value: Gap
-            /// </summary>
-            [EnumMember(Value = "Gap")]
-            Gap = 2,
-            /// <summary>
-            /// Enum Overlap for value: Overlap
-            /// </summary>
-            [EnumMember(Value = "Overlap")]
-            Overlap = 3        }
-        /// <summary>
-        /// Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type
-        /// </summary>
-        /// <value>Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type</value>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public override TypeEnum Type { get; } = TypeEnum.Gap;
         /// <summary>
         /// Initializes a new instance of the <see cref="GapTiling" /> class.
         /// </summary>
         /// <param name="gap">Gap distance between tiles in the given direction (required).</param>
         /// <param name="extensionRule">Rule defining which direction(s) the extension is applied for each tile in the given direction.</param>
         /// <param name="extension">Amount of extra artwork content beyond the tile gap boundary to extend into the gap in the given direction.</param>
-        /// <param name="type">Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type (required).</param>
-        public GapTiling(double? gap = default(double?), ExtensionRuleEnum? extensionRule = default(ExtensionRuleEnum?), double? extension = default(double?), TypeEnum type = default(TypeEnum))
+        public GapTiling(double? gap = default(double?), ExtensionRuleEnum? extensionRule = default(ExtensionRuleEnum?), double? extension = default(double?))
         {
             // to ensure "gap" is required (not null)
             if (gap == null)
@@ -97,15 +74,6 @@ namespace TiliaLabs.Phoenix.Model
             else
             {
                 this.Gap = gap;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for GapTiling and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
             }
             this.ExtensionRule = extensionRule;
             this.Extension = extension;
@@ -142,15 +110,6 @@ namespace TiliaLabs.Phoenix.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
-        /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
 
         /// <summary>
         /// Returns true if objects are equal
@@ -172,7 +131,7 @@ namespace TiliaLabs.Phoenix.Model
             if (input == null)
                 return false;
 
-            return 
+            return base.Equals(input) &&
                 (
                     this.Gap == input.Gap ||
                     (this.Gap != null &&
@@ -187,11 +146,6 @@ namespace TiliaLabs.Phoenix.Model
                     this.Extension == input.Extension ||
                     (this.Extension != null &&
                     this.Extension.Equals(input.Extension))
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
                 );
         }
 
@@ -203,15 +157,13 @@ namespace TiliaLabs.Phoenix.Model
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
+                int hashCode = base.GetHashCode();
                 if (this.Gap != null)
                     hashCode = hashCode * 59 + this.Gap.GetHashCode();
                 if (this.ExtensionRule != null)
                     hashCode = hashCode * 59 + this.ExtensionRule.GetHashCode();
                 if (this.Extension != null)
                     hashCode = hashCode * 59 + this.Extension.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
                 return hashCode;
             }
         }

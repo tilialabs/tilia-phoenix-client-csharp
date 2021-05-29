@@ -28,8 +28,11 @@ namespace TiliaLabs.Phoenix.Model
     /// Tiling rule
     /// </summary>
     [DataContract]
-    [JsonConverter(typeof(JsonSubtypes), "Type")]
-        public partial class TilingRule :  IEquatable<TilingRule>, IValidatableObject
+    [JsonConverter(typeof(JsonSubtypes), "type")]
+    [JsonSubtypes.KnownSubType(typeof(FixedNumberRule), TypeEnum.FixedNumber)]
+    [JsonSubtypes.KnownSubType(typeof(FixedSizeRule), TypeEnum.FixedSize)]
+    [JsonSubtypes.KnownSubType(typeof(VariableSizesRule), TypeEnum.VariableSizes)]
+    public abstract class TilingRule :  IEquatable<TilingRule>, IValidatableObject
     {
         /// <summary>
         /// Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule
@@ -63,24 +66,7 @@ namespace TiliaLabs.Phoenix.Model
         /// </summary>
         /// <value>Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule</value>
         [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TilingRule" /> class.
-        /// </summary>
-        /// <param name="type">Tiling rule type.  &#x27;FixedNumber&#x27; for fixed number rule, &#x27;FixedSize&#x27; for fixed size rule and &#x27;VariableSizes&#x27; for variable sizes rule (required).</param>
-        public TilingRule(TypeEnum type = default(TypeEnum))
-        {
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for TilingRule and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
-            }
-        }
-        
+        public virtual TypeEnum Type { get; }
 
         /// <summary>
         /// Returns the string presentation of the object

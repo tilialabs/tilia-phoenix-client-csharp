@@ -28,8 +28,10 @@ namespace TiliaLabs.Phoenix.Model
     /// Tiling preset defining how tiling is performed
     /// </summary>
     [DataContract]
-    [JsonConverter(typeof(JsonSubtypes), "Type")]
-        public partial class Tiling :  IEquatable<Tiling>, IValidatableObject
+    [JsonConverter(typeof(JsonSubtypes), "type")]
+    [JsonSubtypes.KnownSubType(typeof(StandardTiling), TypeEnum.StandardTiling)]
+    [JsonSubtypes.KnownSubType(typeof(CustomTiling), TypeEnum.CustomTiling)]
+        public abstract class Tiling :  IEquatable<Tiling>, IValidatableObject
     {
         /// <summary>
         /// Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types
@@ -53,17 +55,16 @@ namespace TiliaLabs.Phoenix.Model
         /// </summary>
         /// <value>Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types</value>
         [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public virtual TypeEnum Type { get; }
         /// <summary>
         /// Initializes a new instance of the <see cref="Tiling" /> class.
         /// </summary>
         /// <param name="name">Name (required).</param>
         /// <param name="description">Description.</param>
         /// <param name="notes">Notes.</param>
-        /// <param name="type">Tiling entity type.  &#x27;StandardTiling&#x27; for standard tiling and &#x27;CustomTiling&#x27; for custom tiling types (required).</param>
         /// <param name="properties">Custom properties.</param>
         /// <param name="path">Path.</param>
-        public Tiling(string name = default(string), string description = default(string), string notes = default(string), TypeEnum type = default(TypeEnum), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
+        public Tiling(string name = default(string), string description = default(string), string notes = default(string), List<PropertyObject> properties = default(List<PropertyObject>), string path = default(string))
         {
             // to ensure "name" is required (not null)
             if (name == null)
@@ -73,15 +74,6 @@ namespace TiliaLabs.Phoenix.Model
             else
             {
                 this.Name = name;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for Tiling and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
             }
             this.Description = description;
             this.Notes = notes;
@@ -241,11 +233,6 @@ namespace TiliaLabs.Phoenix.Model
                     this.Notes.Equals(input.Notes))
                 ) && 
                 (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
-                ) && 
-                (
                     this.Properties == input.Properties ||
                     this.Properties != null &&
                     input.Properties != null &&
@@ -281,8 +268,6 @@ namespace TiliaLabs.Phoenix.Model
                     hashCode = hashCode * 59 + this.Description.GetHashCode();
                 if (this.Notes != null)
                     hashCode = hashCode * 59 + this.Notes.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
                 if (this.Properties != null)
                     hashCode = hashCode * 59 + this.Properties.GetHashCode();
                 if (this.Path != null)

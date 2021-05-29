@@ -27,7 +27,7 @@ namespace TiliaLabs.Phoenix.Model
     /// Overlap tiling method creates overlaps between tiles in the given direction
     /// </summary>
     [DataContract]
-        public partial class OverlapTiling :  IEquatable<OverlapTiling>, IValidatableObject
+    public partial class OverlapTiling : TilingMethod, IEquatable<OverlapTiling>, IValidatableObject
     {
         /// <summary>
         /// Rule defining what edge(s) of tiles overlap is applied to in teh given direction
@@ -61,38 +61,14 @@ namespace TiliaLabs.Phoenix.Model
         /// Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type
         /// </summary>
         /// <value>Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type</value>
-        [JsonConverter(typeof(StringEnumConverter))]
-                public enum TypeEnum
-        {
-            /// <summary>
-            /// Enum None for value: None
-            /// </summary>
-            [EnumMember(Value = "None")]
-            None = 1,
-            /// <summary>
-            /// Enum Gap for value: Gap
-            /// </summary>
-            [EnumMember(Value = "Gap")]
-            Gap = 2,
-            /// <summary>
-            /// Enum Overlap for value: Overlap
-            /// </summary>
-            [EnumMember(Value = "Overlap")]
-            Overlap = 3        }
-        /// <summary>
-        /// Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type
-        /// </summary>
-        /// <value>Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type</value>
-        [DataMember(Name="type", EmitDefaultValue=false)]
-        public TypeEnum Type { get; set; }
+        public override TypeEnum Type { get; } = TypeEnum.Overlap;
         /// <summary>
         /// Initializes a new instance of the <see cref="OverlapTiling" /> class.
         /// </summary>
         /// <param name="overlapRule">Rule defining what edge(s) of tiles overlap is applied to in teh given direction.</param>
         /// <param name="overlap">Distance beyond tile edge to extend the tile to create overlap in the given direction (required).</param>
         /// <param name="noImage">Distance of the section at the end of the overlap where artwork content is to be clipped.</param>
-        /// <param name="type">Tiling method type.  &#x27;Gap&#x27; for tile gap rule and &#x27;Overlap&#x27; for tile overlap rule type (required).</param>
-        public OverlapTiling(OverlapRuleEnum? overlapRule = default(OverlapRuleEnum?), double? overlap = default(double?), double? noImage = default(double?), TypeEnum type = default(TypeEnum))
+        public OverlapTiling(OverlapRuleEnum? overlapRule = default(OverlapRuleEnum?), double? overlap = default(double?), double? noImage = default(double?))
         {
             // to ensure "overlap" is required (not null)
             if (overlap == null)
@@ -102,15 +78,6 @@ namespace TiliaLabs.Phoenix.Model
             else
             {
                 this.Overlap = overlap;
-            }
-            // to ensure "type" is required (not null)
-            if (type == null)
-            {
-                throw new InvalidDataException("type is a required property for OverlapTiling and cannot be null");
-            }
-            else
-            {
-                this.Type = type;
             }
             this.OverlapRule = overlapRule;
             this.NoImage = noImage;
@@ -149,15 +116,6 @@ namespace TiliaLabs.Phoenix.Model
         }
   
         /// <summary>
-        /// Returns the JSON string presentation of the object
-        /// </summary>
-        /// <returns>JSON string presentation of the object</returns>
-        public virtual string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-
-        /// <summary>
         /// Returns true if objects are equal
         /// </summary>
         /// <param name="input">Object to be compared</param>
@@ -177,7 +135,7 @@ namespace TiliaLabs.Phoenix.Model
             if (input == null)
                 return false;
 
-            return 
+            return base.Equals(input) &&
                 (
                     this.OverlapRule == input.OverlapRule ||
                     (this.OverlapRule != null &&
@@ -192,11 +150,6 @@ namespace TiliaLabs.Phoenix.Model
                     this.NoImage == input.NoImage ||
                     (this.NoImage != null &&
                     this.NoImage.Equals(input.NoImage))
-                ) && 
-                (
-                    this.Type == input.Type ||
-                    (this.Type != null &&
-                    this.Type.Equals(input.Type))
                 );
         }
 
@@ -208,15 +161,13 @@ namespace TiliaLabs.Phoenix.Model
         {
             unchecked // Overflow is fine, just wrap
             {
-                int hashCode = 41;
+                int hashCode = base.GetHashCode();
                 if (this.OverlapRule != null)
                     hashCode = hashCode * 59 + this.OverlapRule.GetHashCode();
                 if (this.Overlap != null)
                     hashCode = hashCode * 59 + this.Overlap.GetHashCode();
                 if (this.NoImage != null)
                     hashCode = hashCode * 59 + this.NoImage.GetHashCode();
-                if (this.Type != null)
-                    hashCode = hashCode * 59 + this.Type.GetHashCode();
                 return hashCode;
             }
         }
