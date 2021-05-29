@@ -32,8 +32,8 @@ namespace TiliaLabs.Phoenix.Model
         /// <summary>
         /// Gets Type
         /// </summary>
-        [DataMember(Name = "type", EmitDefaultValue = false)]
         public override TypeEnum Type { get; } = TypeEnum.Double;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DoubleProperty" /> class.
         /// </summary>

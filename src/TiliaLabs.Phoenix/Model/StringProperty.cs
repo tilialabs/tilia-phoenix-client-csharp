@@ -24,7 +24,6 @@ namespace TiliaLabs.Phoenix.Model
         /// <summary>
         /// Gets or Sets Type
         /// </summary>
-        [DataMember(Name = "type", EmitDefaultValue = false)]
         public override TypeEnum Type { get; } = TypeEnum.String;
 
         /// <summary>
