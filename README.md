@@ -57,7 +57,7 @@ namespace Example
         {
             Configuration config = Configuration.Default;
             config.BasePath = "http://localhost:8022/phoenix";
-            var instance = new ProjectsAPIApi();
+            var instance = new ProjectsAPIApi(config);
             
             // Create new Phoenix project
             var body = new CreateJobResource(id: "123");
